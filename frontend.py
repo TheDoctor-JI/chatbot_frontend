@@ -4,7 +4,7 @@ import streamlit as st
 
 with st.sidebar:
     chatbot_endpoint = st.text_input(
-        "May I please know your user ID?", key="chatbot_endpoint", type="default"
+        "May I know your user ID? Please tell me here:", key="chatbot_endpoint", type="default"
     )
 st.title("💬 Chatbot")
 
@@ -24,6 +24,13 @@ def initialize():
         reply = r.json()
         chatbot_message = reply.get("responses", {}).get("text", "")
     return chatbot_message
+
+if "user_id" not in st.session_state:
+    if not chatbot_endpoint:
+        st.info("Please input your User ID on the left pane to start conversation.")
+        st.stop()
+    st.session_state["user_id"] = chatbot_endpoint
+
 
 if "messages" not in st.session_state:
     greetings = initialize()
@@ -46,11 +53,13 @@ def send_message(text=""):
     st.success("Message sent! Start processing...")
     r = requests.post("http://20.222.209.72:5010/dialogflow_result", json=query)
     if r.status_code != 200:
-        chatbot_message = "Network unstable. Please type your input and send again. Your history won't be lost."
-        st.error(chatbot_message)
+        chatbot_message = "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
+        error_message = "Network unstable. Please type your input and send again. Your history won't be lost."
+        st.error(error_message)
     else:
         reply = r.json()
         chatbot_message = reply.get("responses", {}).get("text", "")
+        st.success("Processing Finished!")
     return chatbot_message
 
 if prompt := st.chat_input():
