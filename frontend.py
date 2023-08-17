@@ -43,12 +43,12 @@ def send_message(text=""):
         "message_list": [],
         "redo": False,
     }
+    st.success("Message sent! Start processing...")
     r = requests.post("http://20.222.209.72:5010/dialogflow_result", json=query)
     if r.status_code != 200:
         chatbot_message = "Network unstable. Please type your input and send again. Your history won't be lost."
         st.error(chatbot_message)
     else:
-        st.success("Message sent!")
         reply = r.json()
         chatbot_message = reply.get("responses", {}).get("text", "")
     return chatbot_message
