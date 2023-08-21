@@ -5,14 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug streamlit",
+            "name": "Python: Debug Streamlit Module",
             "type": "python",
             "request": "launch",
-            "program": "/Users/dingdongliu/anaconda3/envs/scaffolding/bin/streamlit", // /home/xx/tmp/venv/bin/streamlit",
-            "args": [
-                "run",
-                "frontend.py"
-            ]
+            "module": "streamlit",
+            "justMyCode": true,
+            "args": ["run", "frontend.py"],
         },
         {
             "name": "Python: Current File",
