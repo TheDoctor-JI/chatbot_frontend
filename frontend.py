@@ -1,7 +1,7 @@
 # First
 import requests
 import streamlit as st
-
+import random
 with st.sidebar:
     chatbot_endpoint = st.text_input(
         "May I know your user ID? Please tell me here:", key="chatbot_endpoint", type="default"
@@ -11,11 +11,11 @@ st.title("💬 Chatbot")
 def initialize():
     query = {
         "text": "This is a magic phrase to initialize grace agent to welcome intent.",
-        "session_id": 0,
+        "session_id": st.session_state["session_id"],
         "message_list": [],
         "redo": False,
     }
-    r = requests.post("http://20.222.209.72:5010/dialogflow_result", json=query)
+    r = requests.post("https://certain-quagga-directly.ngrok-free.app/dialogflow_result", json=query)
     if r.status_code != 200:
         chatbot_message = "Network unstable. Please type your input and send again. Your history won't be lost."
         st.error(chatbot_message)
@@ -30,6 +30,7 @@ if "user_id" not in st.session_state:
         st.info("Please input your User ID on the left pane to start conversation.")
         st.stop()
     st.session_state["user_id"] = chatbot_endpoint
+    st.session_state["session_id"] = random.randint(10000000, 500000000)
 
 
 if "messages" not in st.session_state:
@@ -46,12 +47,12 @@ def send_message(text=""):
         return ""
     query = {
         "text": text,
-        "session_id": 0,
+        "session_id": st.session_state["session_id"],
         "message_list": [],
         "redo": False,
     }
     st.success("Message sent! Start processing...")
-    r = requests.post("http://20.222.209.72:5010/dialogflow_result", json=query)
+    r = requests.post("https://certain-quagga-directly.ngrok-free.app/dialogflow_result", json=query)
     if r.status_code != 200:
         chatbot_message = "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
         error_message = "Network unstable. Please type your input and send again. Your history won't be lost."
