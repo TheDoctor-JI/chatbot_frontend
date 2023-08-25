@@ -16,7 +16,7 @@ with st.sidebar:
     language = st.selectbox(
         "Please select your language:",
         ("Please select", "English", "Cantonese"),
-        key="language",
+        key="select_language",
     )
     translator = Azure_Translate()
 st.title("💬 Chatbot")
@@ -48,6 +48,12 @@ if "user_id" not in st.session_state:
         st.info("Please input your User ID on the left pane to start conversation.")
         st.stop()
     st.session_state["user_id"] = chatbot_endpoint
+
+if "language" not in st.session_state:
+    if not language or language == "Please select":
+        st.info("Please select your language on the left pane.")
+        st.stop()
+    st.session_state["language"] = language
 
 
 if "messages" not in st.session_state:
