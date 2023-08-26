@@ -1,8 +1,10 @@
 # First
+import json
 import random
 
 import requests
 import streamlit as st
+
 from Azure_translate import Azure_Translate
 
 # NGROK_DOMAIN = "https://certain-quagga-directly.ngrok-free.app"
@@ -27,12 +29,12 @@ def initialize():
     query = {
         "text": "This is a magic phrase to initialize grace agent to welcome intent.",
         "session_id": st.session_state["session_id"],
-        "message_list": ["This is a magic phrase to initialize grace agent to welcome intent."],
+        "message_list": [
+            "This is a magic phrase to initialize grace agent to welcome intent."
+        ],
         "redo": False,
     }
-    r = requests.post(
-        f"{NGROK_DOMAIN}/dialogflow_result", json=query
-    )
+    r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
     if r.status_code != 200:
         chatbot_message = "Network unstable. Please type your input and send again. Your history won't be lost."
         st.error(chatbot_message)
@@ -64,10 +66,13 @@ if "messages" not in st.session_state:
         )
     else:
         greetings_translation = greetings
-    st.session_state["messages"] = [{
-        "role": "assistant", "content": greetings_translation,
-        "translation": greetings
-    }]
+    st.session_state["messages"] = [
+        {
+            "role": "assistant",
+            "content": greetings_translation,
+            "translation": greetings,
+        }
+    ]
     st.chat_message("assistant").write(greetings_translation)
 else:
     for msg in st.session_state.messages:
@@ -84,9 +89,7 @@ def send_message(text=""):
         "redo": False,
     }
     st.success("Message sent! Start processing...")
-    r = requests.post(
-        f"{NGROK_DOMAIN}/dialogflow_result", json=query
-    )
+    r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
     if r.status_code != 200:
         chatbot_message = "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
         error_message = "Network unstable. Please type your input and send again. Your history won't be lost."
@@ -136,3 +139,10 @@ if prompt := st.chat_input():
         }
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
+
+with st.sidebar:
+    st.download_button(
+        "Download Conversation History",
+        data=json.dumps(st.session_state.messages, indent=4, ensure_ascii=False),
+        file_name=f"{chatbot_endpoint}_conversation_history.json",
+    )
