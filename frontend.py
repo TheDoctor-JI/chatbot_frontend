@@ -6,7 +6,8 @@ import streamlit as st
 from Azure_translate import Azure_Translate
 
 # NGROK_DOMAIN = "https://certain-quagga-directly.ngrok-free.app"
-NGROK_DOMAIN = "https://giving-safely-feline.ngrok-free.app"
+NGROK_DOMAIN = "http://20.222.209.72:5010"
+
 with st.sidebar:
     chatbot_endpoint = st.text_input(
         "May I know your user ID? Please tell me here:",
@@ -58,12 +59,8 @@ if "language" not in st.session_state:
 
 if "messages" not in st.session_state:
     greetings = initialize()
-    if language != "Cantonese":
-        greetings_translation = translator.translate(
-            text=greetings, input_language="yue", output_language="en"
-        )
-    else:
-        greetings_translation = greetings
+
+    greetings_translation = greetings
     st.session_state["messages"] = [{
         "role": "assistant", "content": greetings_translation,
         "translation": greetings
@@ -108,12 +105,8 @@ if prompt := st.chat_input():
 
     st.chat_message("user").write(prompt)
 
-    if language != "Cantonese":
-        prompt_translation = translator.translate(
-            text=prompt, input_language="en", output_language="yue"
-        )
-    else:
-        prompt_translation = prompt
+
+    prompt_translation = prompt
 
     st.session_state.messages.append(
         {"role": "user", "content": prompt, "translation": prompt_translation}
@@ -121,12 +114,8 @@ if prompt := st.chat_input():
 
     chatbot_sentence = send_message(prompt_translation)
 
-    if language != "Cantonese":
-        chatbot_sentence_translation = translator.translate(
-            text=chatbot_sentence, input_language="yue", output_language="en"
-        )
-    else:
-        chatbot_sentence_translation = chatbot_sentence
+
+    chatbot_sentence_translation = chatbot_sentence
 
     st.session_state.messages.append(
         {
@@ -136,3 +125,9 @@ if prompt := st.chat_input():
         }
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
+
+# st.download_button(
+#     "Download Conversation History",
+#     st.session_state.messages,
+#     file_name=f"{chatbot_endpoint}conversation_history.json",
+# )
