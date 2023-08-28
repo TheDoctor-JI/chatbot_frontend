@@ -18,7 +18,8 @@ with st.sidebar:
     )
     language = st.selectbox(
         "Please select your language:",
-        ("Please select", "English", "Cantonese"),
+        ("Please select", "English"),
+        # ("Please select", "English", "Cantonese"),
         key="select_language",
     )
     translator = Azure_Translate()
