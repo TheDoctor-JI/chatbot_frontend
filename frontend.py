@@ -49,8 +49,7 @@ def initialize():
             "responses": {"text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"},
             "status": False,
         }
-        # "Network unstable. Please type your input and send again. Your history won't be lost."
-        st.error(chatbot_message)
+        st.error("Network unstable. Please type your input and send again. Your history won't be lost.")
     else:
         # st.success("Message sent!")
         reply = r.json()
