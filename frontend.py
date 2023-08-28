@@ -8,7 +8,8 @@ import streamlit as st
 from Azure_translate import Azure_Translate
 
 # NGROK_DOMAIN = "https://certain-quagga-directly.ngrok-free.app"
-NGROK_DOMAIN = "http://20.222.209.72:5010"
+# NGROK_DOMAIN = "http://20.222.209.72:5010"
+NGROK_DOMAIN = "http://localhost:5010"
 
 with st.sidebar:
     chatbot_endpoint = st.text_input(
@@ -23,6 +24,11 @@ with st.sidebar:
         key="select_language",
     )
     translator = Azure_Translate()
+    display_mode = st.selectbox(
+        "Please select your display mode",
+        ("normal", "log"),
+        key="select_display_mode",
+    )
 
 st.title("💬 Chatbot")
 
@@ -39,12 +45,18 @@ def initialize():
     }
     r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
     if r.status_code != 200:
-        chatbot_message = "Network unstable. Please type your input and send again. Your history won't be lost."
+        chatbot_message = {
+            "responses": {"text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"},
+            "status": False,
+        }
+        # "Network unstable. Please type your input and send again. Your history won't be lost."
         st.error(chatbot_message)
     else:
         # st.success("Message sent!")
         reply = r.json()
-        chatbot_message = reply.get("responses", {}).get("text", "")
+        # chatbot_message = reply.get("responses", {}).get("text", "")
+        chatbot_message = reply
+        chatbot_message["status"] = True
     return chatbot_message
 
 
@@ -64,18 +76,34 @@ if "language" not in st.session_state:
 if "messages" not in st.session_state:
     greetings = initialize()
 
-    greetings_translation = greetings
+    greetings_translation = greetings.get("responses", {}).get("text", "")
     st.session_state["messages"] = [
         {
             "role": "assistant",
             "content": greetings_translation,
-            "translation": greetings,
+            "response": greetings,
+            "relevance": greetings.get("user_input", {}).get("relevance", "start conversation"),
+            "level": greetings.get("user_input", {}).get("level", ""),
+            "scaffold_method": greetings.get("responses", {}).get("scaffold_method", "start conversation"),
         }
     ]
     st.chat_message("assistant").write(greetings_translation)
-else:
+elif display_mode == "normal":
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
+else:
+    for msg in st.session_state.messages:
+        if msg["role"] == "user":
+            st.chat_message(msg["role"]).write(msg["content"])
+        elif msg["role"] == "assistant":
+            if msg["content"] != "Hello. My name is Grace. How are you today?":
+                st.write({
+                    "relevance": msg["relevance"],
+                    "level": msg["level"],
+                    "scaffold_method": msg["scaffold_method"],
+                })
+            st.chat_message(msg["role"]).write(msg["content"])
+
 
 
 def send_message(text=""):
@@ -90,12 +118,18 @@ def send_message(text=""):
     st.success("Message sent! Start processing...")
     r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
     if r.status_code != 200:
-        chatbot_message = "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
+        chatbot_message = {
+            "responses": {"text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"},
+            "status": False,
+        }
+        # "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
         error_message = "Network unstable. Please type your input and send again. Your history won't be lost."
         st.error(error_message)
     else:
         reply = r.json()
-        chatbot_message = reply.get("responses", {}).get("text", "")
+        # chatbot_message = reply.get("responses", {}).get("text", "")
+        chatbot_message = reply
+        chatbot_message["status"] = True
         st.success("Processing Finished!")
     return chatbot_message
 
@@ -118,13 +152,15 @@ if prompt := st.chat_input():
 
     chatbot_sentence = send_message(prompt_translation)
 
-    chatbot_sentence_translation = chatbot_sentence
-
+    chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get("text", "")
     st.session_state.messages.append(
         {
             "role": "assistant",
             "content": chatbot_sentence_translation,
-            "translation": chatbot_sentence,
+            "response": chatbot_sentence,
+            "relevance": chatbot_sentence.get("user_input", {}).get("relevance", ""),
+            "level": chatbot_sentence.get("user_input", {}).get("level", ""),
+            "scaffold_method": chatbot_sentence.get("responses", {}).get("scaffold_method", ""),
         }
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
