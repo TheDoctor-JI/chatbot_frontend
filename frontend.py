@@ -101,6 +101,8 @@ else:
                     "level": msg["level"],
                     "scaffold_method": msg["scaffold_method"],
                 })
+                if msg.get("other_SFQs", {}):
+                    st.json(msg.get("other_SFQs", {}), expanded=False)
             st.chat_message(msg["role"]).write(msg["content"])
 
 
@@ -152,6 +154,14 @@ if prompt := st.chat_input():
     chatbot_sentence = send_message(prompt_translation)
 
     chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get("text", "")
+
+    other_SFQs, sfq_list = {}, chatbot_sentence.get("candidate_sf_questions", [])
+    for sfq in sfq_list:
+        sf_method = sfq.get("scaffolding method", "")
+        sf_question = sfq.get("question", "")
+        if sf_method and sf_question:
+            other_SFQs[sf_method] = sf_question
+
     st.session_state.messages.append(
         {
             "role": "assistant",
@@ -160,6 +170,7 @@ if prompt := st.chat_input():
             "relevance": chatbot_sentence.get("user_input", {}).get("relevance", ""),
             "level": chatbot_sentence.get("user_input", {}).get("level", ""),
             "scaffold_method": chatbot_sentence.get("responses", {}).get("scaffold_method", ""),
+            "other_SFQs": other_SFQs if other_SFQs else {},
         }
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
