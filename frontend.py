@@ -26,7 +26,7 @@ with st.sidebar:
         key="select_display_mode",
     )
     translator = Azure_Translate()
-st.title("💬 Chatbot")
+st.title("💬 BS Chatbot")
 
 
 def initialize():
