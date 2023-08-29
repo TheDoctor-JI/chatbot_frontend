@@ -155,12 +155,14 @@ if prompt := st.chat_input():
 
     chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get("text", "")
 
-    other_SFQs, sfq_list = {}, chatbot_sentence.get("candidate_sf_questions", [])
-    for sfq in sfq_list:
-        sf_method = sfq.get("scaffolding method", "")
-        sf_question = sfq.get("question", "")
-        if sf_method and sf_question:
-            other_SFQs[sf_method] = sf_question
+    other_SFQs = {}
+    sfq_list = chatbot_sentence.get("candidate_sf_questions", [])
+    if sfq_list:
+        for sfq in sfq_list:
+            sf_method = sfq.get("scaffolding method", "")
+            sf_question = sfq.get("question", "")
+            if sf_method and sf_question:
+                other_SFQs[sf_method] = sf_question
 
     st.session_state.messages.append(
         {
