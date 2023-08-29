@@ -84,7 +84,9 @@ if "messages" not in st.session_state:
             "role": "assistant",
             "content": greetings_translation,
             "response": greetings,
-            "relevance": intent,
+            "intent": intent,
+            "relevance": "not processed",
+            "level": "",
             "scaffold_method": None,
         }
     ]
@@ -97,9 +99,10 @@ else:
         if msg["role"] == "user":
             st.chat_message(msg["role"]).write(msg["content"])
         else:
-            if msg["relevance"] != "Default Welcome Intent":
+            if msg["intent"] != "Default Welcome Intent":
                 st.write({
-                    "level": msg["relevance"],
+                    "relavance": msg["relevance"],
+                    "level": msg["level"],
                     "scaffold_method": msg["scaffold_method"],
                 })
             st.chat_message(msg["role"]).write(msg["content"])
@@ -164,12 +167,16 @@ if prompt := st.chat_input():
     else:
         chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get("text", "")
     intent = chatbot_sentence.get("responses", {}).get("intent", "")
+    relevance = True
+    level = "Cannot" if "Fail" in intent else "Acceptable"
     st.session_state.messages.append(
         {
             "role": "assistant",
             "content": chatbot_sentence_translation,
+            "intent": intent,
             "response": chatbot_sentence,
-            "relevance": intent,
+            "relevance": relevance,
+            "level": level,
             "scaffold_method": None if ("Success" in intent or "Skip" in intent) else "repeat question",
         }
     )
