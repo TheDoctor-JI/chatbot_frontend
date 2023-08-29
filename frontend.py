@@ -30,7 +30,7 @@ with st.sidebar:
         key="select_display_mode",
     )
 
-st.title("💬 Chatbot")
+st.title("💬 SF Chatbot")
 
 
 def initialize():
