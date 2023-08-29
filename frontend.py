@@ -8,8 +8,8 @@ import streamlit as st
 from Azure_translate import Azure_Translate
 
 # NGROK_DOMAIN = "https://certain-quagga-directly.ngrok-free.app"
-# NGROK_DOMAIN = "http://20.222.209.72:5010"
-NGROK_DOMAIN = "http://localhost:5010"
+NGROK_DOMAIN = "http://20.222.209.72:5010"
+# NGROK_DOMAIN = "http://localhost:5010"
 
 with st.sidebar:
     chatbot_endpoint = st.text_input(
