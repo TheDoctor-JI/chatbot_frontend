@@ -17,6 +17,11 @@ with st.sidebar:
         key="chatbot_endpoint",
         type="default",
     )
+    domain = st.text_input(
+        "May I know your domain? Please tell me here:",
+        key="domain",
+        type="default",
+    )
     language = st.selectbox(
         "Please select your language:",
         ("Please select", "English"),
@@ -30,7 +35,7 @@ with st.sidebar:
         key="select_display_mode",
     )
 
-st.title("💬 SF Chatbot")
+st.title("💬 PAF Chatbot")
 
 
 def initialize():
@@ -63,6 +68,10 @@ if "user_id" not in st.session_state:
     if not chatbot_endpoint:
         st.info("Please input your User ID on the left pane to start conversation.")
         st.stop()
+    if not domain:
+        st.info("Please input your domain on the left pane to start conversation.")
+        st.stop()
+    NGROK_DOMAIN = domain
     st.session_state["user_id"] = chatbot_endpoint
 
 if "language" not in st.session_state:
