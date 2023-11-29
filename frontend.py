@@ -8,7 +8,9 @@ import streamlit as st
 from Azure_translate import Azure_Translate
 
 # NGROK_DOMAIN = "https://certain-quagga-directly.ngrok-free.app"
-NGROK_DOMAIN = "http://20.222.209.72:5010"
+# NGROK_DOMAIN = "http://20.222.209.72:5010"
+NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+# NGROK_DOMAIN = ""
 # NGROK_DOMAIN = "http://localhost:5010"
 
 with st.sidebar:
@@ -48,13 +50,17 @@ def initialize():
         ],
         "redo": False,
     }
-    r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
+    r = requests.post(f"{NGROK_DOMAIN}/dialogue", json=query)
     if r.status_code != 200:
         chatbot_message = {
-            "responses": {"text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"},
+            "responses": {
+                "next_question_text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
+            },
             "status": False,
         }
-        st.error("Network unstable. Please type your input and send again. Your history won't be lost.")
+        st.error(
+            "Network unstable. Please type your input and send again. Your history won't be lost."
+        )
     else:
         # st.success("Message sent!")
         reply = r.json()
@@ -84,15 +90,19 @@ if "language" not in st.session_state:
 if "messages" not in st.session_state:
     greetings = initialize()
 
-    greetings_translation = greetings.get("responses", {}).get("text", "")
+    greetings_translation = greetings.get("responses", {}).get("next_question_text", "")
     st.session_state["messages"] = [
         {
             "role": "assistant",
             "content": greetings_translation,
             "response": greetings,
-            "relevance": greetings.get("user_input", {}).get("relevance", "start conversation"),
+            "relevance": greetings.get("user_input", {}).get(
+                "relevance", "start conversation"
+            ),
             "level": greetings.get("user_input", {}).get("level", ""),
-            "scaffold_method": greetings.get("responses", {}).get("scaffold_method", "start conversation"),
+            "scaffold_method": greetings.get("responses", {}).get(
+                "scaffold_method", "start conversation"
+            ),
         }
     ]
     st.chat_message("assistant").write(greetings_translation)
@@ -105,15 +115,16 @@ else:
             st.chat_message(msg["role"]).write(msg["content"])
         elif msg["role"] == "assistant":
             if msg["content"] != "Hello. My name is Grace. How are you today?":
-                st.write({
-                    "relevance": msg["relevance"],
-                    "level": msg["level"],
-                    "scaffold_method": msg["scaffold_method"],
-                })
+                st.write(
+                    {
+                        "relevance": msg["relevance"],
+                        "level": msg["level"],
+                        "scaffold_method": msg["scaffold_method"],
+                    }
+                )
                 if msg.get("other_SFQs", {}):
                     st.json(msg.get("other_SFQs", {}), expanded=False)
             st.chat_message(msg["role"]).write(msg["content"])
-
 
 
 def send_message(text=""):
@@ -126,10 +137,12 @@ def send_message(text=""):
         "redo": False,
     }
     st.success("Message sent! Start processing...")
-    r = requests.post(f"{NGROK_DOMAIN}/dialogflow_result", json=query)
+    r = requests.post(f"{NGROK_DOMAIN}/dialogue", json=query)
     if r.status_code != 200:
         chatbot_message = {
-            "responses": {"text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"},
+            "responses": {
+                "next_question_text": "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
+            },
             "status": False,
         }
         # "Sorry I didn't hear you due to network issue. Can you wait for a few seconds and type it again?"
@@ -162,7 +175,9 @@ if prompt := st.chat_input():
 
     chatbot_sentence = send_message(prompt_translation)
 
-    chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get("text", "")
+    chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get(
+        "next_question_text", ""
+    )
 
     other_SFQs = {}
     sfq_list = chatbot_sentence.get("candidate_sf_questions", [])
@@ -180,7 +195,9 @@ if prompt := st.chat_input():
             "response": chatbot_sentence,
             "relevance": chatbot_sentence.get("user_input", {}).get("relevance", ""),
             "level": chatbot_sentence.get("user_input", {}).get("level", ""),
-            "scaffold_method": chatbot_sentence.get("responses", {}).get("scaffold_method", ""),
+            "scaffold_method": chatbot_sentence.get("responses", {}).get(
+                "scaffold_method", ""
+            ),
             "other_SFQs": other_SFQs if other_SFQs else {},
         }
     )
