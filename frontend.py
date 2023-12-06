@@ -24,12 +24,12 @@ with st.sidebar:
         key="domain",
         type="default",
     )
-    language = st.selectbox(
-        "Please select your language:",
-        ("Please select", "English"),
-        # ("Please select", "English", "Cantonese"),
-        key="select_language",
-    )
+    # language = st.selectbox(
+    #     "Please select your language:",
+    #     ("Please select", "English"),
+    #     # ("Please select", "English", "Cantonese"),
+    #     key="select_language",
+    # )
     translator = Azure_Translate()
     display_mode = st.selectbox(
         "Please select your display mode",
@@ -80,11 +80,11 @@ if "user_id" not in st.session_state:
     NGROK_DOMAIN = domain
     st.session_state["user_id"] = chatbot_endpoint
 
-if "language" not in st.session_state:
-    if not language or language == "Please select":
-        st.info("Please select your language on the left pane.")
-        st.stop()
-    st.session_state["language"] = language
+# if "language" not in st.session_state:
+#     if not language or language == "Please select":
+#         st.info("Please select your language on the left pane.")
+#         st.stop()
+#     st.session_state["language"] = language
 
 
 if "messages" not in st.session_state:
@@ -103,6 +103,7 @@ if "messages" not in st.session_state:
             "scaffold_method": greetings.get("responses", {}).get(
                 "scaffold_method", "start conversation"
             ),
+            "original_response": greetings,
         }
     ]
     st.chat_message("assistant").write(greetings_translation)
@@ -116,11 +117,12 @@ else:
         elif msg["role"] == "assistant":
             if msg["content"] != "Hello. My name is Grace. How are you today?":
                 st.write(
-                    {
-                        "relevance": msg["relevance"],
-                        "level": msg["level"],
-                        "scaffold_method": msg["scaffold_method"],
-                    }
+                    # {
+                    #     "relevance": msg["relevance"],
+                    #     "level": msg["level"],
+                    #     "scaffold_method": msg["scaffold_method"],
+                    # }
+                    msg.get("original_response", {})
                 )
                 if msg.get("other_SFQs", {}):
                     st.json(msg.get("other_SFQs", {}), expanded=False)
@@ -161,9 +163,9 @@ if prompt := st.chat_input():
     if not chatbot_endpoint:
         st.info("Please input your User ID.")
         st.stop()
-    if not language or language == "Please select":
-        st.info("Please select your language.")
-        st.stop()
+    # if not language or language == "Please select":
+    #     st.info("Please select your language.")
+    #     st.stop()
 
     st.chat_message("user").write(prompt)
 
@@ -199,6 +201,7 @@ if prompt := st.chat_input():
                 "scaffold_method", ""
             ),
             "other_SFQs": other_SFQs if other_SFQs else {},
+            "original_response": chatbot_sentence,
         }
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
