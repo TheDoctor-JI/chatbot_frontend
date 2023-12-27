@@ -107,7 +107,8 @@ if __name__ == "__main__":
                 "wb",
             ) as f:
                 f.write(audio_bytes)
-            chatbot_sentence = send_message(first_alternative)
+            with st.spinner("Chatbot is thinking..."):
+                chatbot_sentence = send_message(first_alternative)
             chatbot_reply = parse_chatbot_reply(chatbot_sentence)
             sound_block = st.empty()
             with st.spinner("Generating audio..."):

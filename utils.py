@@ -44,7 +44,7 @@ def send_message(text=""):
         "message_list": [text],
         "redo": False,
     }
-    st.success("Message sent! Start processing...")
+    # st.success("Message sent! Start processing...")
     r = requests.post(f"{NGROK_DOMAIN}/dialogue", json=query)
     if r.status_code != 200:
         chatbot_message = {
