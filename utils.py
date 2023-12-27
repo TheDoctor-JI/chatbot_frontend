@@ -1,40 +1,14 @@
-# First
-import json
-import random
-
-import requests
 import streamlit as st
-from audio_recorder_streamlit import audio_recorder
+import requests
+import random
 
 NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
 
-with st.sidebar:
-    user_id = st.text_input(
-        label="Please input your User ID here:",
-        key="user_id",
-        type="default",
-        value=None,
-    )
-    domain = st.text_input(
-        "Please input the chatbot domain here:",
-        key="domain",
-        type="default",
-        value=None,
-    )
-    # translator = Azure_Translate()
-    display_mode = st.selectbox(
-        label="Please select your display mode",
-        options=("normal", "log"),
-        key="select_display_mode",
-    )
 
-st.title("💬 PAF Chatbot")
-
-
-def initialize():
+def initialize_conversation(text: str = ""):
     st.session_state["session_id"] = random.randint(10000000, 500000000)
     query = {
-        "text": "This is a magic phrase to initialize grace agent to welcome intent.",
+        "text": "This is a magic phrase to initialize grace agent to welcome intent." if not text else text,
         "session_id": st.session_state["session_id"],
         "message_list": [
             "This is a magic phrase to initialize grace agent to welcome intent."
@@ -114,11 +88,11 @@ def display_chat(mode: str = "normal"):
                 )
                 st.chat_message(msg["role"]).write(msg["content"])
 
-def parse_greetings(greetings):
-    greetings_translation = greetings.get("responses", {}).get(
-            "next_question_text", ""
-        )
+
+def initialize_and_parse_greetings(user_greetings, greetings):
+    greetings_translation = greetings.get("responses", {}).get("next_question_text", "")
     st.session_state["messages"] = [
+        user_greetings,
         {
             "role": "assistant",
             "content": greetings_translation,
@@ -133,13 +107,14 @@ def parse_greetings(greetings):
             "original_response": greetings,
         }
     ]
-    st.chat_message("assistant").write(greetings_translation)
+    # st.chat_message("assistant").write(greetings_translation)
     return greetings_translation
+
 
 def parse_chatbot_reply(chatbot_sentence):
     chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get(
-            "next_question_text", ""
-        )
+        "next_question_text", ""
+    )
 
     other_SFQs = {}
     sfq_list = chatbot_sentence.get("candidate_sf_questions", [])
@@ -155,9 +130,7 @@ def parse_chatbot_reply(chatbot_sentence):
             "role": "assistant",
             "content": chatbot_sentence_translation,
             "response": chatbot_sentence,
-            "relevance": chatbot_sentence.get("user_input", {}).get(
-                "relevance", ""
-            ),
+            "relevance": chatbot_sentence.get("user_input", {}).get("relevance", ""),
             "level": chatbot_sentence.get("user_input", {}).get("level", ""),
             "scaffold_method": chatbot_sentence.get("responses", {}).get(
                 "scaffold_method", ""
@@ -166,90 +139,5 @@ def parse_chatbot_reply(chatbot_sentence):
             "original_response": chatbot_sentence,
         }
     )
-    st.chat_message("assistant").write(chatbot_sentence_translation)
+    # st.chat_message("assistant").write(chatbot_sentence_translation)
     return chatbot_sentence_translation
-
-if __name__ == "__main__":
-    # if "user_id" not in st.session_state or st.session_state.get("user_id") is None:
-    if not user_id:
-        st.info("Please input your User ID on the left pane to start conversation.")
-        st.stop()
-    # if not domain:
-    #     st.info("Please input your domain on the left pane to start conversation.")
-    #     st.stop()
-    # NGROK_DOMAIN = domain
-
-    # start conversation
-    if "messages" not in st.session_state:
-        # That indicates the first time user talk with the chatbot
-        greetings = initialize()
-        greetings_translation = greetings.get("responses", {}).get(
-            "next_question_text", ""
-        )
-        st.session_state["messages"] = [
-            {
-                "role": "assistant",
-                "content": greetings_translation,
-                "response": greetings,
-                "relevance": greetings.get("user_input", {}).get(
-                    "relevance", "start conversation"
-                ),
-                "level": greetings.get("user_input", {}).get("level", ""),
-                "scaffold_method": greetings.get("responses", {}).get(
-                    "scaffold_method", "start conversation"
-                ),
-                "original_response": greetings,
-            }
-        ]
-        st.chat_message("assistant").write(greetings_translation)
-    else:
-        display_chat(display_mode)
-
-    if prompt := st.chat_input():
-        st.chat_message("user").write(prompt)
-
-        prompt_translation = prompt
-
-        st.session_state.messages.append(
-            {"role": "user", "content": prompt, "translation": prompt_translation}
-        )
-
-        chatbot_sentence = send_message(prompt_translation)
-
-        chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get(
-            "next_question_text", ""
-        )
-
-        other_SFQs = {}
-        sfq_list = chatbot_sentence.get("candidate_sf_questions", [])
-        if sfq_list:
-            for sfq in sfq_list:
-                sf_method = sfq.get("scaffolding method", "")
-                sf_question = sfq.get("question", "")
-                if sf_method and sf_question:
-                    other_SFQs[sf_method] = sf_question
-
-        st.session_state.messages.append(
-            {
-                "role": "assistant",
-                "content": chatbot_sentence_translation,
-                "response": chatbot_sentence,
-                "relevance": chatbot_sentence.get("user_input", {}).get(
-                    "relevance", ""
-                ),
-                "level": chatbot_sentence.get("user_input", {}).get("level", ""),
-                "scaffold_method": chatbot_sentence.get("responses", {}).get(
-                    "scaffold_method", ""
-                ),
-                "other_SFQs": other_SFQs if other_SFQs else {},
-                "original_response": chatbot_sentence,
-            }
-        )
-        st.chat_message("assistant").write(chatbot_sentence_translation)
-
-    with st.sidebar:
-        st.download_button(
-            "Download Conversation History",
-            data=json.dumps(st.session_state.messages, indent=4, ensure_ascii=False),
-            file_name=f"{user_id}_conversation_history.json",
-        )

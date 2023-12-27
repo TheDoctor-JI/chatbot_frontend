@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Debug Streamlit Module",
+            "name": "Python: Debug with Streamlit Module",
             "type": "python",
             "request": "launch",
             "module": "streamlit",
             "justMyCode": true,
-            "args": ["run", "frontend.py"],
+            "args": ["run", "${file}"],
         },
         {
             "name": "Python: Current File",
