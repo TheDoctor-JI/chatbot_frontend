@@ -8,7 +8,7 @@ NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
 def initialize_conversation(text: str = ""):
     st.session_state["session_id"] = random.randint(10000000, 500000000)
     query = {
-        "text": "This is a magic phrase to initialize grace agent to welcome intent." if not text else text,
+        "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],
         "message_list": [
             "This is a magic phrase to initialize grace agent to welcome intent."
@@ -105,7 +105,7 @@ def initialize_and_parse_greetings(user_greetings, greetings):
                 "scaffold_method", "start conversation"
             ),
             "original_response": greetings,
-        }
+        },
     ]
     # st.chat_message("assistant").write(greetings_translation)
     return greetings_translation

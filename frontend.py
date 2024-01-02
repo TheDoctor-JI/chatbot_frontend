@@ -34,11 +34,9 @@ st.title("💬 PAF Chatbot")
 def initialize():
     st.session_state["session_id"] = random.randint(10000000, 500000000)
     query = {
-        "text": "This is a magic phrase to initialize grace agent to welcome intent.",
+        "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],
-        "message_list": [
-            "This is a magic phrase to initialize grace agent to welcome intent."
-        ],
+        "message_list": ["INITIALIZE-SESSION"],
         "redo": False,
     }
     r = requests.post(f"{NGROK_DOMAIN}/dialogue", json=query)
@@ -114,10 +112,9 @@ def display_chat(mode: str = "normal"):
                 )
                 st.chat_message(msg["role"]).write(msg["content"])
 
+
 def parse_greetings(greetings):
-    greetings_translation = greetings.get("responses", {}).get(
-            "next_question_text", ""
-        )
+    greetings_translation = greetings.get("responses", {}).get("next_question_text", "")
     st.session_state["messages"] = [
         {
             "role": "assistant",
@@ -136,10 +133,11 @@ def parse_greetings(greetings):
     st.chat_message("assistant").write(greetings_translation)
     return greetings_translation
 
+
 def parse_chatbot_reply(chatbot_sentence):
     chatbot_sentence_translation = chatbot_sentence.get("responses", {}).get(
-            "next_question_text", ""
-        )
+        "next_question_text", ""
+    )
 
     other_SFQs = {}
     sfq_list = chatbot_sentence.get("candidate_sf_questions", [])
@@ -155,9 +153,7 @@ def parse_chatbot_reply(chatbot_sentence):
             "role": "assistant",
             "content": chatbot_sentence_translation,
             "response": chatbot_sentence,
-            "relevance": chatbot_sentence.get("user_input", {}).get(
-                "relevance", ""
-            ),
+            "relevance": chatbot_sentence.get("user_input", {}).get("relevance", ""),
             "level": chatbot_sentence.get("user_input", {}).get("level", ""),
             "scaffold_method": chatbot_sentence.get("responses", {}).get(
                 "scaffold_method", ""
@@ -168,6 +164,7 @@ def parse_chatbot_reply(chatbot_sentence):
     )
     st.chat_message("assistant").write(chatbot_sentence_translation)
     return chatbot_sentence_translation
+
 
 if __name__ == "__main__":
     # if "user_id" not in st.session_state or st.session_state.get("user_id") is None:
