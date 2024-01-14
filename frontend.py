@@ -4,9 +4,9 @@ import random
 
 import requests
 import streamlit as st
-from audio_recorder_streamlit import audio_recorder
 
 NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+NGROK_DOMAIN = "http://localhost:5000/"
 
 with st.sidebar:
     user_id = st.text_input(
@@ -21,7 +21,6 @@ with st.sidebar:
         type="default",
         value=None,
     )
-    # translator = Azure_Translate()
     display_mode = st.selectbox(
         label="Please select your display mode",
         options=("normal", "log"),
@@ -53,7 +52,6 @@ def initialize():
     else:
         # st.success("Message sent!")
         reply = r.json()
-        # chatbot_message = reply.get("responses", {}).get("text", "")
         chatbot_message = reply
         chatbot_message["status"] = True
     return chatbot_message
@@ -82,7 +80,6 @@ def send_message(text=""):
         st.error(error_message)
     else:
         reply = r.json()
-        # chatbot_message = reply.get("responses", {}).get("text", "")
         chatbot_message = reply
         chatbot_message["status"] = True
         st.success("Processing Finished!")
@@ -121,11 +118,11 @@ def parse_greetings(greetings):
             "content": greetings_translation,
             "response": greetings,
             "relevance": greetings.get("user_input", {}).get(
-                "relevance", "start conversation"
+                "relevance", "start conversation, not checked"
             ),
             "level": greetings.get("user_input", {}).get("level", ""),
             "scaffold_method": greetings.get("responses", {}).get(
-                "scaffold_method", "start conversation"
+                "scaffold_method", "start conversation, N.A."
             ),
             "original_response": greetings,
         }
