@@ -19,7 +19,7 @@ with st.sidebar:
         "Please input the chatbot domain here:",
         key="domain",
         type="default",
-        value="http://eez115.ece.ust.hk:5000/",
+        value=NGROK_DOMAIN,
     )
     display_mode = st.selectbox(
         label="Please select your display mode",
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     # if not domain:
     #     st.info("Please input your domain on the left pane to start conversation.")
     #     st.stop()
-    # NGROK_DOMAIN = domain
+    NGROK_DOMAIN = domain
 
     # start conversation
     if "messages" not in st.session_state:
@@ -242,6 +242,7 @@ if __name__ == "__main__":
         st.chat_message("assistant").write(chatbot_sentence_translation)
 
     with st.sidebar:
+        st.write("Your Session ID: ", st.session_state["session_id"])
         st.download_button(
             "Download Conversation History",
             data=json.dumps(st.session_state.messages, indent=4, ensure_ascii=False),
