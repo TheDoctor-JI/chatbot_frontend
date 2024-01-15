@@ -22,11 +22,6 @@ with st.sidebar:
         type="default",
         value=NGROK_DOMAIN,
     )
-    display_mode = st.selectbox(
-        label="Please select your display mode",
-        options=("normal", "log"),
-        key="select_display_mode",
-    )
 
 st.title("💬 PAF Result")
 
@@ -46,4 +41,6 @@ if __name__ == "__main__":
     response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
     response = response.json()
     table = pd.DataFrame.from_dict(response.get("responses", {}), orient='index')
-    st.table(table)
+    table = table.reset_index(drop=True)[["question_asked", "slot_name", "slot_value"]]
+    st.write(f"Session ID: {session_id}")
+    st.data_editor(table)
