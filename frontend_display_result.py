@@ -14,7 +14,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="user_id",
         type="default",
-        value="102292667",
+        value="382725594",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
@@ -41,6 +41,6 @@ if __name__ == "__main__":
     response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
     response = response.json()
     table = pd.DataFrame.from_dict(response.get("responses", {}), orient='index')
-    table = table.reset_index(drop=True)[["question_asked", "slot_name", "slot_value"]]
+    table = table.reset_index(drop=True)[["slot_name", "slot_value", "question_asked", "patient_answer"]]
     st.write(f"Session ID: {session_id}")
     st.data_editor(table)
