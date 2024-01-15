@@ -6,7 +6,7 @@ import requests
 import streamlit as st
 
 NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
-NGROK_DOMAIN = "http://localhost:5000/"
+# NGROK_DOMAIN = "http://localhost:5000/"
 
 with st.sidebar:
     user_id = st.text_input(
