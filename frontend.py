@@ -19,7 +19,7 @@ with st.sidebar:
         "Please input the chatbot domain here:",
         key="domain",
         type="default",
-        value=None,
+        value="http://eez115.ece.ust.hk:5000/",
     )
     display_mode = st.selectbox(
         label="Please select your display mode",
