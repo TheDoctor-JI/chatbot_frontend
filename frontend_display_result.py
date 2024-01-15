@@ -14,7 +14,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="user_id",
         type="default",
-        value="382725594",
+        value="235372514",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
@@ -30,7 +30,7 @@ st.title("💬 PAF Result")
 if __name__ == "__main__":
     # if "user_id" not in st.session_state or st.session_state.get("user_id") is None:
     if not session_id:
-        st.info("Please input your Session ID on the left pane to start conversation.")
+        st.info("Please input your Session ID on the left pane to check your conversation summary.")
         st.stop()
     # if not domain:
     #     st.info("Please input your domain on the left pane to start conversation.")
