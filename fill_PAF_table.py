@@ -27,7 +27,7 @@ PAF_Questions_Bilingual = [
     "Color 痰顏色係咩？",
     "History of Falling 有冇跌過？",
     "Ambulatory Aid 有冇用過行動輔助器具？",
-    "Vision 視力如何？",
+    "Vision Problem 視力問題？",
     "Weight Loss 有冇體重下降？",
     "Weight Loss Amount 輕咗幾多？",
     "Appetite Loss 胃口差别？",
@@ -55,7 +55,7 @@ def fill_paf_table(original_data: dict) -> pd.DataFrame:
             if slot_filling_info:
                 # paf_result["PAF_Result"][i] = "☐ ☑️" + slot_filling_info.get("slot_value", "N.A.")
                 paf_result["PAF_Result"][i] = convert_paf_questionnaire_line(slot_key, slot_filling_info.get("slot_value", "N.A."))
-    except Exception as e:
+    except Exception:
         paf_result = {}
     return pd.DataFrame(paf_result)
 
