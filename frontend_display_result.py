@@ -1,6 +1,4 @@
-# First
-import json
-import random
+from fill_PAF_table import fill_paf_table
 import pandas as pd
 
 import requests
@@ -40,7 +38,11 @@ if __name__ == "__main__":
 
     response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
     response = response.json()
+    paf_result = fill_paf_table(response.get("responses", {}))
     table = pd.DataFrame.from_dict(response.get("responses", {}), orient='index')
     table = table.reset_index(drop=True)[["slot_name", "slot_value", "question_asked", "patient_answer"]]
+    # st.write("### PAF Result")
     st.write(f"Session ID: {session_id}")
-    st.data_editor(table)
+    st.data_editor(data=paf_result, use_container_width=True)
+    st.write("### Original Conversation Data")
+    st.dataframe(table, use_container_width=True)
