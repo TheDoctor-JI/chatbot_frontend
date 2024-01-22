@@ -22,8 +22,8 @@ PAF_Questions = list(PAF_Question_Mapping.keys())
 PAF_Questions_Bilingual = [
     "Coughing 請問有冇咳？",
     "Sputum 請問有冇痰？",
-    "Amount 有痰的話，有幾多量？",
-    "Color 痰顏色係咩？",
+    "Sputum Amount 有痰的話，有幾多量？",
+    "Sputum Color 痰顏色係咩？",
     "History of Falling 有冇跌過？",
     "Ambulatory Aid 有冇用過行動輔助器具？",
     "Vision Problem 視力問題？",
