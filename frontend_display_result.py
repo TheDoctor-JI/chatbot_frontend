@@ -41,8 +41,6 @@ if __name__ == "__main__":
     response_data = response.get("responses", {})
     conversation_history = response_data.pop("conversation_history", None)
     paf_result = fill_paf_table(response_data)
-    table = pd.DataFrame.from_dict(response_data, orient='index')
-    table = table.reset_index(drop=True)[["slot_name", "slot_value", "question_asked", "patient_answer"]]
     # st.write("### PAF Result")
     st.write(f"Session ID: {session_id}")
     st.data_editor(data=paf_result, use_container_width=True)
@@ -58,4 +56,8 @@ if __name__ == "__main__":
         #             st.write(turn.get("utterance"))
     with slot_filling_tab:
         st.write("#### Slot Filling Data")
+        table = pd.DataFrame.from_dict(response_data, orient='index')
+        columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
+        all_columns_exist = all(col in table.columns for col in columns_to_check)
+        table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
         st.dataframe(table, use_container_width=True)
