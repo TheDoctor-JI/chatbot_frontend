@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 # 'cough_existence', 'sputum_existence', 'sputum_amount', 'sputum_color', 'history_of_falling', 'ambulatory_aid', 'vision_problem', 'weight_loss_existance', 'weight_loss_amount', 'appetite_loss', 'denture', 'denture_option', 'special_diet', 'food_preference'
 PAF_Question_Mapping = {
     "Coughing": 'q1_0_coughing_existance', 
@@ -45,7 +44,7 @@ def fill_paf_table(original_data: dict) -> pd.DataFrame:
     """
     paf_result = {
         "PAF_Question": PAF_Questions_Bilingual,
-        "PAF_Result": ["N.A."] * len(PAF_Questions),
+        "PAF_Result": [" "] * len(PAF_Questions),
         # "Need Follow-up": [""] * len(PAF_Questions),
     }
     try:

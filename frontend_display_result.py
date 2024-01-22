@@ -38,11 +38,24 @@ if __name__ == "__main__":
 
     response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
     response = response.json()
-    paf_result = fill_paf_table(response.get("responses", {}))
-    table = pd.DataFrame.from_dict(response.get("responses", {}), orient='index')
+    response_data = response.get("responses", {})
+    conversation_history = response_data.pop("conversation_history", None)
+    paf_result = fill_paf_table(response_data)
+    table = pd.DataFrame.from_dict(response_data, orient='index')
     table = table.reset_index(drop=True)[["slot_name", "slot_value", "question_asked", "patient_answer"]]
     # st.write("### PAF Result")
     st.write(f"Session ID: {session_id}")
     st.data_editor(data=paf_result, use_container_width=True)
-    st.write("### Original Conversation Data")
-    st.dataframe(table, use_container_width=True)
+    st.write("### Details")
+    history_tab, slot_filling_tab = st.tabs(["Conversation History", "Key Information"])
+    with history_tab:
+        st.write("#### Conversation History")
+        st.dataframe(conversation_history, use_container_width=True)
+
+        # with st.container(height=400):
+        #     for turn in conversation_history:
+        #         with st.chat_message(turn.get("role")):
+        #             st.write(turn.get("utterance"))
+    with slot_filling_tab:
+        st.write("#### Slot Filling Data")
+        st.dataframe(table, use_container_width=True)
