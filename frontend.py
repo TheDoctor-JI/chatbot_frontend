@@ -105,6 +105,7 @@ def display_chat(mode: str = "normal"):
                         "relevance": msg["relevance"],
                         "level": msg["level"],
                         "scaffold_method": msg["scaffold_method"],
+                        "msg": msg
                     }
                 )
                 st.chat_message(msg["role"]).write(msg["content"])

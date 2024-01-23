@@ -12,7 +12,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="user_id",
         type="default",
-        value="235372514",
+        value="494016298",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
@@ -45,19 +45,20 @@ if __name__ == "__main__":
     st.write(f"Session ID: {session_id}")
     st.data_editor(data=paf_result, use_container_width=True)
     st.write("### Details")
-    history_tab, slot_filling_tab = st.tabs(["Conversation History", "Key Information"])
+    [history_tab] = st.tabs(["Conversation History"])
     with history_tab:
         st.write("#### Conversation History")
-        st.dataframe(conversation_history, use_container_width=True)
+        # st.dataframe(conversation_history, use_container_width=True)
 
-        # with st.container(height=400):
-        #     for turn in conversation_history:
-        #         with st.chat_message(turn.get("role")):
-        #             st.write(turn.get("utterance"))
-    with slot_filling_tab:
-        st.write("#### Slot Filling Data")
-        table = pd.DataFrame.from_dict(response_data, orient='index')
-        columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
-        all_columns_exist = all(col in table.columns for col in columns_to_check)
-        table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
-        st.dataframe(table, use_container_width=True)
+        with st.container(height=400):
+            for turn in conversation_history:
+                role = "user" if turn.get("role") == "Patient" else "assistant"
+                with st.chat_message(role):
+                    st.write(turn.get("utterance"))
+    # with slot_filling_tab:
+    #     st.write("#### Slot Filling Data")
+    #     table = pd.DataFrame.from_dict(response_data, orient='index')
+    #     columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
+    #     all_columns_exist = all(col in table.columns for col in columns_to_check)
+    #     table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
+    #     st.dataframe(table, use_container_width=True)
