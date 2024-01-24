@@ -44,6 +44,7 @@ if __name__ == "__main__":
     # st.write("### PAF Result")
     st.write(f"Session ID: {session_id}")
     st.data_editor(data=paf_result, use_container_width=True)
+    # st.markdown(paf_result.to_markdown(), unsafe_allow_html=True)
     st.write("### Details")
     [history_tab, slot_filling_tab] = st.tabs(["Conversation History", "Other Info"])
     with history_tab:
