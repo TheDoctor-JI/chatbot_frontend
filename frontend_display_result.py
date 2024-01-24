@@ -45,7 +45,7 @@ if __name__ == "__main__":
     st.write(f"Session ID: {session_id}")
     st.data_editor(data=paf_result, use_container_width=True)
     st.write("### Details")
-    [history_tab] = st.tabs(["Conversation History"])
+    [history_tab, slot_filling_tab] = st.tabs(["Conversation History", "Other Info"])
     with history_tab:
         st.write("#### Conversation History")
         # st.dataframe(conversation_history, use_container_width=True)
@@ -55,10 +55,13 @@ if __name__ == "__main__":
                 role = "user" if turn.get("role") == "Patient" else "assistant"
                 with st.chat_message(role):
                     st.write(turn.get("utterance"))
-    # with slot_filling_tab:
-    #     st.write("#### Slot Filling Data")
-    #     table = pd.DataFrame.from_dict(response_data, orient='index')
-    #     columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
-    #     all_columns_exist = all(col in table.columns for col in columns_to_check)
-    #     table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
-    #     st.dataframe(table, use_container_width=True)
+    with slot_filling_tab:
+        st.write("#### Slot Filling Data")
+        table = pd.DataFrame.from_dict(response_data, orient='index')
+        columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
+        all_columns_exist = all(col in table.columns for col in columns_to_check)
+        table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
+        if not table.empty:
+            # remove the rows with empty slot_name
+            table = table[table["slot_name"].notna()]
+        st.dataframe(table, use_container_width=True)

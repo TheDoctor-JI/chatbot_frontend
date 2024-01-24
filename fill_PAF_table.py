@@ -22,19 +22,30 @@ PAF_Questions = list(PAF_Question_Mapping.keys())
 PAF_Questions_Bilingual = [
     "Coughing 請問有冇咳？",
     "Sputum 請問有冇痰？",
-    "Sputum Amount 有痰的話，有幾多量？",
-    "Sputum Color 痰顏色係咩？",
+    "\t – \t Sputum Amount 有痰的話，有幾多量？",
+    "\t – \t Sputum Color 痰顏色係咩？",
     # "History of Falling 有冇跌過？",
     # "Ambulatory Aid 有冇用過行動輔助器具？",
     # "Vision Problem 視力問題？",
     "Weight Loss 有冇體重下降？",
-    "Weight Loss Amount 輕咗幾多？",
+    "\t – \t Weight Loss Amount 輕咗幾多？",
     "Appetite Loss 胃口差别？",
     # "Denture 有冇假牙？",
     # "Denture Type 假牙係固定定可拆卸？",
     # "Special Diet 有冇特別飲食？",
     "Food Preference 咩唔食？",
 ]
+
+PAF_Index = {
+    0: "1",
+    1: "2",
+    2: "2.1",
+    3: "2.2",
+    4: "3",
+    5: "3.1",
+    6: "4",
+    7: "5",
+}
 
 def fill_paf_table(original_data: dict) -> pd.DataFrame:
     """
@@ -56,12 +67,12 @@ def fill_paf_table(original_data: dict) -> pd.DataFrame:
             slot_filling_info = original_data.get(slot_key, None)
             if slot_filling_info:
                 paf_result["PAF_Result"][i] = convert_paf_questionnaire_line(slot_key, slot_filling_info.get("slot_value", "N.A."))
-            
-            
-            
+        # final_table = pd.DataFrame(paf_result, index=PAF_Index.values())
+        final_table = pd.DataFrame.from_dict(paf_result).rename(index=PAF_Index)
     except Exception:
         paf_result = {}
-    return pd.DataFrame(paf_result)
+        final_table = pd.DataFrame.from_dict(paf_result)
+    return final_table
 
 def fill_NA_follow_up_questions(ori_data: dict):
     if ori_data.get("q2_0_sputum_existance", {}).get("slot_value", "").lower() == "no":
