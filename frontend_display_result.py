@@ -12,7 +12,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="user_id",
         type="default",
-        value="227194704",
+        value="496623041",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
