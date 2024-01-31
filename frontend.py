@@ -31,7 +31,16 @@ st.title("💬 PAF Chatbot")
 
 
 def initialize():
-    st.session_state["session_id"] = random.randint(10000000, 500000000)
+    # st.session_state["session_id"] = random.randint(10000000, 500000000)
+    fixed_session_id = 12345678
+    r = requests.post(f"{NGROK_DOMAIN}/delete_session", json={"session_id": fixed_session_id})
+    if r.status_code != 200:
+        st.error("Fail to initialize a session. Please refresh the page and try again.")
+        st.stop()
+    else:
+        st.success("Session initialized! " + r.json().get("responses",{}).get("result", {}))
+        # st.write(r.json())
+    st.session_state["session_id"] = fixed_session_id
     query = {
         "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],
