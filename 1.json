@@ -1,0 +1,152 @@
+{
+    "responses": {
+        "ambulatory_aid": {
+            "patient_answer": "冇呀",
+            "question_asked": "你平時行路洗唔洗揸住支棍或者其他嘢呀？",
+            "session_id": 1,
+            "slot_name": "ambulatory_aid",
+            "slot_value": "none/bed rest/nurse assist"
+        },
+        "conversation_history": [
+            {
+                "role": "Grace",
+                "utterance": "你好啊！我喺 Grace。你今日覺得點啊？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "好呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "有冇痰呀？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "有痰"
+            },
+            {
+                "role": "Grace",
+                "utterance": "有痰，咁係多痰定少少呢？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "少少呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "啲痰通常係乜嘢顏色？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "黃色"
+            },
+            {
+                "role": "Grace",
+                "utterance": "你平時行路洗唔洗揸住支棍或者其他嘢呀？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "冇呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "你睇嘢有冇困難呀？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "我困難呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "最近三個月你有冇瘦咗啲？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "我到咗"
+            },
+            {
+                "role": "Grace",
+                "utterance": "輕左幾多磅呀？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "好清楚呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "輕左幾多呀？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "冇呀"
+            },
+            {
+                "role": "Grace",
+                "utterance": "輕左幾多磅呀？"
+            },
+            {
+                "role": "Grace",
+                "utterance": "胃口點呀？有冇唔想食嘢？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "no response after a long time (say 10 seconds)"
+            },
+            {
+                "role": "Grace",
+                "utterance": "唔好意思，我冇聽清楚？胃口點呀？有冇唔想食嘢？"
+            },
+            {
+                "role": "Patient",
+                "utterance": "revert previous intent due to barge in"
+            },
+            {
+                "role": "Grace",
+                "utterance": "胃口有冇差到？"
+            },
+            {
+                "role": "Grace",
+                "utterance": "唔該你等等吓, 我而家搵個護士嚟同你傾吓偈"
+            },
+            {
+                "role": "Patient",
+                "utterance": "冇呀\n好呀"
+            }
+        ],
+        "sputum_amount": {
+            "patient_answer": "少少呀",
+            "question_asked": "有痰，咁係多痰定少少呢？",
+            "session_id": 1,
+            "slot_name": "sputum_amount",
+            "slot_value": "the patient has experienced a small amount of sputum."
+        },
+        "sputum_color": {
+            "patient_answer": "黃色",
+            "question_asked": "啲痰通常係乜嘢顏色？",
+            "session_id": 1,
+            "slot_name": "sputum_color",
+            "slot_value": "黃色"
+        },
+        "sputum_existence": {
+            "patient_answer": "有痰",
+            "question_asked": "有冇痰呀？",
+            "session_id": 1,
+            "slot_name": "sputum_existence",
+            "slot_value": "yes"
+        },
+        "vision_problem": {
+            "patient_answer": "我困難呀",
+            "question_asked": "你睇嘢有冇困難呀？",
+            "session_id": 1,
+            "slot_name": "vision_problem",
+            "slot_value": "yes"
+        },
+        "weight_loss_existance": {
+            "patient_answer": "我到咗",
+            "question_asked": "最近三個月你有冇瘦咗啲？",
+            "session_id": 1,
+            "slot_name": "weight_loss_existance",
+            "slot_value": "yes"
+        }
+    }
+}

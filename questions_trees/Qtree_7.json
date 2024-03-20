@@ -1,0 +1,35 @@
+{   "sequence": [5, 52, 6, 7, 72],
+    "q0_greeting": {
+        "correct_next": "q5_0_lose_weight_existance"
+    },
+    "q5_0_lose_weight_existance": {
+        "yes": "q5_1_lose_weight_amount",
+        "no": "q5_2_decreased_appetite",
+        "skip": "q6_0_denture"
+    },
+    "q5_1_lose_weight_amount": {
+        "correct_next": "q5_2_decreased_appetite",
+        "skip": "q6_0_denture"
+    },
+    "q5_2_decreased_appetite": {
+        "correct_next": "q6_0_denture",
+        "skip": "q6_0_denture"
+    },
+    "q6_0_denture": {
+        "yes": "q6_1_dental_followup_fixed_or_removable",
+        "no": "q7_0_diet",
+        "skip": "q7_0_diet"
+    },
+    "q6_1_dental_followup_fixed_or_removable": {
+        "correct_next": "q7_0_diet",
+        "skip": "q7_0_diet"
+    },
+    "q7_0_diet": {
+        "correct_next": "q7_2_food_preference",
+        "skip": "q7_2_food_preference"
+    },
+    "q7_2_food_preference": {
+        "correct_next": "closing",
+        "skip": "closing"
+    }
+}

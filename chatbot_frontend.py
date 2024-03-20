@@ -26,13 +26,22 @@ with st.sidebar:
         options=("normal", "log"),
         key="select_display_mode",
     )
+    fixed_session_id = st.text_input(
+        label="Please input your Session ID here:",
+        key="session_id",
+        type="default",
+        value=None,
+    )
 
 st.title("💬 PAF Chatbot")
 
 
 def initialize():
     # st.session_state["session_id"] = random.randint(10000000, 500000000)
-    fixed_session_id = 12345678
+    # fixed_session_id = 12345678
+    if not fixed_session_id:
+        st.error("Please input your Session ID on the left pane to start conversation.")
+        st.stop()
     r = requests.post(f"{NGROK_DOMAIN}/delete_session", json={"session_id": fixed_session_id})
     if r.status_code != 200:
         st.error("Fail to initialize a session. Please refresh the page and try again.")
@@ -40,7 +49,7 @@ def initialize():
     else:
         st.success("Session initialized! " + r.json().get("responses",{}).get("result", {}))
         # st.write(r.json())
-    st.session_state["session_id"] = fixed_session_id
+    # st.session_state["session_id"] = fixed_session_id
     query = {
         "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],

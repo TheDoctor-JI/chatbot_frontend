@@ -1,0 +1,39 @@
+{   "sequence": [3, 4, 5, 6, 72],
+    "q0_greeting": {
+        "correct_next": "q3_0_history_falling"
+    },
+    "q3_0_history_falling": {
+        "correct_next": "q3_1_ambulatory_aid",
+        "skip": "q3_1_ambulatory_aid"
+    },
+    "q3_1_ambulatory_aid": {
+        "correct_next": "q4_0_vision",
+        "skip": "q4_0_vision"
+    },
+    "q4_0_vision": {
+        "correct_next": "q5_0_lose_weight_existance",
+        "skip": "q5_0_lose_weight_existance"
+    },
+    "q5_0_lose_weight_existance": {
+        "yes": "q5_1_lose_weight_amount",
+        "no": "q6_0_denture",
+        "skip": "q6_0_denture"
+    },
+    "q5_1_lose_weight_amount": {
+        "correct_next": "q6_0_denture",
+        "skip": "q6_0_denture"
+    },
+    "q6_0_denture": {
+        "yes": "q6_1_dental_followup_fixed_or_removable",
+        "no": "q7_2_food_preference",
+        "skip": "q7_2_food_preference"
+    },
+    "q6_1_dental_followup_fixed_or_removable": {
+        "correct_next": "q7_2_food_preference",
+        "skip": "q7_2_food_preference"
+    },
+    "q7_2_food_preference": {
+        "correct_next": "closing",
+        "skip": "closing"
+    }
+}

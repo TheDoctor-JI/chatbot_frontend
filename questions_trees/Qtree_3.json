@@ -1,0 +1,39 @@
+{   "sequence": [2, 31, 4, 52, 6],
+    "q0_greeting": {
+        "correct_next": "q2_0_sputum_existance"
+    },   
+    "q2_0_sputum_existance": {
+        "yes": "q2_1_sputum_amount",
+        "no": "q3_1_ambulatory_aid",
+        "skip": "q3_1_ambulatory_aid"
+    },
+    "q2_1_sputum_amount": {
+        "correct_next": "q2_2_sputum_colour",
+        "skip": "q3_1_ambulatory_aid"
+    },
+    "q2_2_sputum_colour": {
+        "correct_next": "q3_1_ambulatory_aid",
+        "skip": "q3_1_ambulatory_aid"
+    },
+    "q3_1_ambulatory_aid": {
+        "correct_next": "q4_0_vision",
+        "skip": "q4_0_vision"
+    },
+    "q4_0_vision": {
+        "correct_next": "q5_2_decreased_appetite",
+        "skip": "q5_2_decreased_appetite"
+    },
+    "q5_2_decreased_appetite": {
+        "correct_next": "q6_0_denture",
+        "skip": "q6_0_denture"
+    },
+    "q6_0_denture": {
+        "yes": "q6_1_dental_followup_fixed_or_removable",
+        "no": "closing",
+        "skip": "closing"
+    },
+    "q6_1_dental_followup_fixed_or_removable": {
+        "correct_next": "closing",
+        "skip": "closing"
+    }
+}
