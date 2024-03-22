@@ -5,15 +5,15 @@ import random
 import requests
 import streamlit as st
 
-# NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
-NGROK_DOMAIN = "http://localhost:8080/"
+NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+# NGROK_DOMAIN = "http://localhost:8080/"
 
 with st.sidebar:
     user_id = st.text_input(
         label="Please input your User ID here:",
         key="user_id",
         type="default",
-        value=None,
+        value="TestCase",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",

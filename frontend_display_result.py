@@ -40,7 +40,7 @@ if __name__ == "__main__":
         st.error("No data found for the given session ID.")
         st.stop()
     conversation_history = response_data.pop("conversation_history", None)
-    tree_id = int(session_id.split("_")[-1]) % 8
+    tree_id = int(session_id.split("_")[-1]) % 9
     paf_result = parse_slot_filling_data(response_data, experiment_variation=tree_id)
 
     st.write(f"Session ID: {session_id}")

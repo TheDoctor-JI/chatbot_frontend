@@ -59,7 +59,7 @@ def parse_slot_filling_data(data: dict, experiment_variation = -1) -> pd.DataFra
     experiment_conditions = fill_experiment_conditions()
     questions_assessed = (
         [True] * len(PAF_Questions)
-        if experiment_variation == -1
+        if (experiment_variation == -1 or experiment_variation == 8)
         else experiment_conditions[experiment_variation]
     )
     PAF_table = pd.DataFrame(
