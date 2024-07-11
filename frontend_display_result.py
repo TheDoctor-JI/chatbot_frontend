@@ -12,7 +12,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="session_id",
         type="default",
-        value=1,
+        value="2",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
@@ -62,6 +62,7 @@ if __name__ == "__main__":
                 "PAF_Question": "PAF Questions",
                 "Slot_Display": "Patient Answer",
             },
+            height=540,
         )
     else:
         # Display the full PAF result (all columns)
@@ -77,7 +78,7 @@ if __name__ == "__main__":
         st.write("#### Conversation History")
         # st.dataframe(conversation_history, use_container_width=True)
 
-        with st.container(height=400):
+        with st.container():
             for turn in conversation_history:
                 role = "user" if turn.get("role") == "Patient" else "assistant"
                 with st.chat_message(role):

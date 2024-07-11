@@ -1,0 +1,44 @@
+{
+    "sequence": [3,31,4,5,2],
+    "q0_greeting": {
+        "correct_next": "q1_0_coughing_existance"
+    },
+    "q0_greeting_eng": {
+        "correct_next": "q1_0_coughing_existance_eng"
+    },
+    "q1_0_coughing_existance_eng": {
+        "correct_next": "q2_0_sputum_existance_eng",
+        "skip": "q2_0_sputum_existance_eng"
+    },
+    "q2_0_sputum_existance_eng": {
+        "yes": "q2_1_sputum_amount_eng",
+        "no": "q5_0_lose_weight_existance_eng",
+        "skip": "q5_0_lose_weight_existance_eng"
+    },
+    "q2_1_sputum_amount_eng": {
+        "correct_next": "q2_2_sputum_colour_eng",
+        "skip": "q5_0_lose_weight_existance_eng"
+    },
+    "q2_2_sputum_colour_eng": {
+        "correct_next": "q5_0_lose_weight_existance_eng",
+        "skip": "q5_0_lose_weight_existance_eng"
+    },
+    "q5_0_lose_weight_existance_eng": {
+        "yes": "q5_1_lose_weight_amount_eng",
+        "no": "q5_2_decreased_appetite_eng",
+        "sub_skip": "q5_2_decreased_appetite_eng",
+        "skip": "q7_2_food_preference_eng"
+    },
+    "q5_1_lose_weight_amount_eng": {
+        "correct_next": "q5_2_decreased_appetite_eng",
+        "skip": "q7_2_food_preference_eng"
+    },
+    "q5_2_decreased_appetite_eng": {
+        "correct_next": "q7_2_food_preference_eng",
+        "skip": "q7_2_food_preference_eng"
+    },
+    "q7_2_food_preference_eng": {
+        "correct_next": "closing_eng",
+        "skip": "closing_eng"
+    }
+}

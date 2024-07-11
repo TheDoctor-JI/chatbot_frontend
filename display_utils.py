@@ -50,7 +50,11 @@ def fill_experiment_conditions():
             with open(os.path.join("questions_trees", file)) as f:
                 data = json.load(f)
             # find the key of data that is a valid PAF_Question_ID
-            assessed_question_ids = [key for key in data if key in PAF_Question_ID]
+            if tree_id != 8: # tree 8 is a special tree
+                assessed_question_ids = [key for key in data if key in PAF_Question_ID]
+            else:
+                assessed_question_ids = [key[:-4] for key in data if key[:-4] in PAF_Question_ID]
+
             # create a list of booleans to indicate whether the question is assessed
             experiment_conditions[tree_id] = [key in assessed_question_ids for key in PAF_Question_ID]
     return experiment_conditions
@@ -59,7 +63,7 @@ def parse_slot_filling_data(data: dict, experiment_variation = -1) -> pd.DataFra
     experiment_conditions = fill_experiment_conditions()
     questions_assessed = (
         [True] * len(PAF_Questions)
-        if (experiment_variation == -1 or experiment_variation == 8)
+        if (experiment_variation == -1 or experiment_variation > 8)
         else experiment_conditions[experiment_variation]
     )
     PAF_table = pd.DataFrame(
