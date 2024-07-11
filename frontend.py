@@ -5,8 +5,8 @@ import random
 import requests
 import streamlit as st
 
-NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
-# NGROK_DOMAIN = "http://localhost:5000/"
+# NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+NGROK_DOMAIN = "http://localhost:8080/"
 
 with st.sidebar:
     user_id = st.text_input(
@@ -15,12 +15,18 @@ with st.sidebar:
         type="default",
         value=None,
     )
-    domain = st.text_input(
-        "Please input the chatbot domain here:",
-        key="domain",
+    session_id = st.text_input(
+        label="Please input your Session ID here ↓ Format: (\w+)_(\d)",
+        key="session_id",
         type="default",
-        value=NGROK_DOMAIN,
+        value=None,
     )
+    # domain = st.text_input(
+    #     "Please input the chatbot domain here:",
+    #     key="domain",
+    #     type="default",
+    #     value=NGROK_DOMAIN,
+    # )
     display_mode = st.selectbox(
         label="Please select your display mode",
         options=("normal", "log"),
@@ -31,7 +37,7 @@ st.title("💬 PAF Chatbot")
 
 
 def initialize():
-    st.session_state["session_id"] = random.randint(10000000, 500000000)
+    # st.session_state["session_id"] = random.randint(10000000, 500000000)
     query = {
         "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],
@@ -171,7 +177,10 @@ if __name__ == "__main__":
     # if not domain:
     #     st.info("Please input your domain on the left pane to start conversation.")
     #     st.stop()
-    NGROK_DOMAIN = domain
+    # NGROK_DOMAIN = domain
+    if not session_id:
+        st.info("Please input your Session ID on the left pane to start conversation. Format: (\w+)_(\d)")
+        st.stop()
 
     # start conversation
     if "messages" not in st.session_state:
