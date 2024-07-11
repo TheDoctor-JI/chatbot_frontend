@@ -2,11 +2,12 @@ import streamlit as st
 import requests
 import random
 
-NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+# NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+NGROK_DOMAIN = "http://localhost:8080/"
 
 
 def initialize_conversation(text: str = ""):
-    st.session_state["session_id"] = random.randint(10000000, 500000000)
+    # st.session_state["session_id"] = random.randint(10000000, 500000000)
     query = {
         "text": "INITIALIZE-SESSION",
         "session_id": st.session_state["session_id"],

@@ -24,6 +24,12 @@ with st.sidebar:
         type="default",
         value=None,
     )
+    session_id = st.text_input(
+        label="Please input your Session ID here ↓ Format: (\w+)_(\d)",
+        key="session_id",
+        type="default",
+        value=None,
+    )
 
 data_root = "exp_data"
 
@@ -31,6 +37,10 @@ if __name__ == "__main__":
     if not user_id:
         st.warning("Please input your User ID on the left pane to start conversation.")
         st.stop()
+    if not session_id:
+        st.warning("Please input your Session ID on the left pane to start conversation. Format: (\w+)_(\d)")
+        st.stop()
+    # st.session_state["session_id"] = session_id
     if not os.path.exists(os.path.join(data_root, user_id)):
         os.makedirs(os.path.join(data_root, user_id))
     st.info("Please allow the browser to access your microphone.")
