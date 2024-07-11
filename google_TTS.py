@@ -1,9 +1,13 @@
 from google.cloud import texttospeech
+import os
+import dotenv
+
+dotenv.load_dotenv()
 
 
 def synthesize_text_with_audio_profile(text, output, effects_profile_id: str = ""):
     """Synthesizes speech from the input string of text."""
-    client = texttospeech.TextToSpeechClient()
+    client = texttospeech.TextToSpeechClient(credentials= os.getenv("GOOGLE_API_KEY"))
 
     input_text = texttospeech.SynthesisInput(text=text)
 

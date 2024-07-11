@@ -1,12 +1,15 @@
 import argparse
 from google.cloud import speech
+import dotenv
+import os
 
+dotenv.load_dotenv()
 
 def transcribe_file_with_auto_punctuation(
     content: bytes, language_code: str = "yue-Hant-HK",
 ) -> speech.RecognizeResponse:
     """Transcribe the given audio file with auto punctuation enabled."""
-    client = speech.SpeechClient()
+    client = speech.SpeechClient(credentials=os.getenv("GOOGLE_API_KEY"))
 
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(
