@@ -1,0 +1,9 @@
+COPD_QUESTIONNAIRE:
+  q_0_coughing: "the severity of coughing"
+  q_1_sputum: "the amount of sputum in the lungs"
+  q_2_chest_tightness: "the experience of chest tightness"
+  q_3_breathlessness: "the experience of breathlessness when walking up slopes and stairs"
+  q_4_difficulty_moving: "the difficulty of moving around at home"
+  q_5_traveling: "the lack of confidence of going outdoors"
+  q_6_sleep_difficulty: "the poor sleep conditions"
+  q_7_level_energy: "the lack of energy"

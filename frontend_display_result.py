@@ -1,7 +1,8 @@
-from fill_PAF_table import fill_paf_table
-import pandas as pd
+import json
 
 import requests
+from utils import parse_copd_history, validate_session_history, parse_patient_answer
+import pandas as pd
 import streamlit as st
 
 NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
@@ -12,7 +13,7 @@ with st.sidebar:
         label="Please input your Session ID here:",
         key="user_id",
         type="default",
-        value="496623041",
+        value="",
     )
     domain = st.text_input(
         "Please input the chatbot domain here:",
@@ -21,12 +22,10 @@ with st.sidebar:
         value=NGROK_DOMAIN,
     )
 
-st.title("💬 PAF Result")
-
+st.title("💬 COPD Questionnaire Result")
 
 
 if __name__ == "__main__":
-    # if "user_id" not in st.session_state or st.session_state.get("user_id") is None:
     if not session_id:
         st.info("Please input your Session ID on the left pane to check your conversation summary.")
         st.stop()
@@ -39,30 +38,29 @@ if __name__ == "__main__":
     response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
     response = response.json()
     response_data = response.get("responses", {})
-    conversation_history = response_data.pop("conversation_history", None)
-    paf_result = fill_paf_table(response_data)
-    # st.write("### PAF Result")
+    # with open("exp_data/sample/1.json", "r") as f:
+    #     response_data = json.load(f)
+    validate_session_history(response_data)
+
+    conversation_history = response_data.pop("conversation_history", [])
+    session_id = response_data.pop("sessionID", "")
+    patient_answer = response_data.pop("patient_answer", [])
+
+    # Parse the patient answer
+    parsed_patient_answer = parse_patient_answer(patient_answer)
+
     st.write(f"Session ID: {session_id}")
-    st.data_editor(data=paf_result, use_container_width=True)
-    # st.markdown(paf_result.to_markdown(), unsafe_allow_html=True)
+    st.data_editor(data=parsed_patient_answer, use_container_width=True,)
+    # for item in parsed_patient_answer:
+    #     question, answer = item["Question"], item["Patient Answer"]
+    #     st.slider(label=question, min_value=0, max_value=5, value=answer, disabled=True)
+
     st.write("### Details")
-    [history_tab, slot_filling_tab] = st.tabs(["Conversation History", "Other Info"])
+    [history_tab] = st.tabs(["Conversation History"])
     with history_tab:
         st.write("#### Conversation History")
-        # st.dataframe(conversation_history, use_container_width=True)
-
         with st.container(height=400):
-            for turn in conversation_history:
-                role = "user" if turn.get("role") == "Patient" else "assistant"
+            parsed_conversation_history = parse_copd_history(conversation_history)
+            for role, utterance in parsed_conversation_history:
                 with st.chat_message(role):
-                    st.write(turn.get("utterance"))
-    with slot_filling_tab:
-        st.write("#### Slot Filling Data")
-        table = pd.DataFrame.from_dict(response_data, orient='index')
-        columns_to_check = ["slot_name", "slot_value", "question_asked", "patient_answer"]
-        all_columns_exist = all(col in table.columns for col in columns_to_check)
-        table = table.reset_index(drop=True)[columns_to_check] if all_columns_exist else table
-        if not table.empty:
-            # remove the rows with empty slot_name
-            table = table[table["slot_name"].notna()]
-        st.dataframe(table, use_container_width=True)
+                    st.write(utterance)
