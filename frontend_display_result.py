@@ -5,7 +5,7 @@ from utils import parse_copd_history, validate_session_history, parse_patient_an
 import pandas as pd
 import streamlit as st
 
-NGROK_DOMAIN = "http://eez115.ece.ust.hk:5000/"
+NGROK_DOMAIN = "http://eez114.ece.ust.hk:5000/"
 # NGROK_DOMAIN = "http://localhost:8080/"
 
 with st.sidebar:
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     if domain != NGROK_DOMAIN:
         NGROK_DOMAIN = domain
 
-    response = requests.post(f"{NGROK_DOMAIN}/get_paf_result", json={"session_id": session_id})
+    response = requests.post(f"{NGROK_DOMAIN}/get_copd_result", json={"session_id": session_id})
     response = response.json()
     response_data = response.get("responses", {})
     # with open("exp_data/sample/1.json", "r") as f:

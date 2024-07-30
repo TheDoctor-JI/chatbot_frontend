@@ -100,7 +100,7 @@ def parse_patient_answer(patient_answer: list):
     for i, item in enumerate(patient_answer):
         question_id, real_question, answer = item["question_id"], item["question"], item["answer"]
         question = COPD_QUESTIONNAIRE[question_id]
-        parsed_patient_answer.append({"Question": question, "Patient Answer": int(answer), "Index": i+1})
+        parsed_patient_answer.append({"Question": question, "Patient Answer": answer, "Index": i+1})
 
     # Convert the answer to pd.DataFrame with "Index" as the dataframe index
     df = pd.DataFrame(parsed_patient_answer)
