@@ -5,6 +5,8 @@ from utils import parse_copd_history, validate_session_history, parse_patient_an
 import pandas as pd
 import streamlit as st
 
+from streamlit_autorefresh import st_autorefresh
+
 NGROK_DOMAIN = "http://eez114.ece.ust.hk:5000/"
 # NGROK_DOMAIN = "http://localhost:8080/"
 
@@ -24,6 +26,7 @@ with st.sidebar:
 
 st.title("💬 COPD Questionnaire Result")
 
+st_autorefresh(interval=5 * 1000, key="dataframerefresh")  # Refresh every 5 seconds
 
 if __name__ == "__main__":
     if not session_id:
