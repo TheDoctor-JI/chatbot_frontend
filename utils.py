@@ -92,15 +92,20 @@ def parse_patient_answer(patient_answer: list):
         pd.DataFrame: The parsed patient answer in a DataFrame format.
     """
     # Match the question id and exact question wording
-    with open("COPD_questionnaire.yaml", "r") as f:
-        questions = yaml.safe_load(f)
+    lang = "ENGLISH"
+    if lang == "CANTONESE":
+        with open("COPD_questionnaire_cantonese.yaml", "r") as f:
+            questions = yaml.safe_load(f)
+    else:
+        with open("COPD_questionnaire.yaml", "r") as f:
+            questions = yaml.safe_load(f)
     COPD_QUESTIONNAIRE = questions["COPD_QUESTIONNAIRE"]
     # Parse the patient answer into a list of dicts, with key "Question" and "Patient Answer"
     parsed_patient_answer = []
     for i, item in enumerate(patient_answer):
         question_id, real_question, answer = item["question_id"], item["question"], item["answer"]
         question = COPD_QUESTIONNAIRE[question_id]
-        parsed_patient_answer.append({"Question": question, "Patient Answer": answer, "Index": i+1})
+        parsed_patient_answer.append({"Question 問題": question, "Patient Answer 回答": answer, "Index": i+1})
 
     # Convert the answer to pd.DataFrame with "Index" as the dataframe index
     df = pd.DataFrame(parsed_patient_answer)
