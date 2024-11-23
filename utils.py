@@ -92,7 +92,8 @@ def parse_patient_answer(patient_answer: list):
         pd.DataFrame: The parsed patient answer in a DataFrame format.
     """
     # Match the question id and exact question wording
-    lang = "ENGLISH"
+    # lang = "ENGLISH"
+    lang = "CANTONESE"
     if lang == "CANTONESE":
         with open("COPD_questionnaire_cantonese.yaml", "r") as f:
             questions = yaml.safe_load(f)
