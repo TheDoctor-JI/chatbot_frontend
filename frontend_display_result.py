@@ -24,7 +24,7 @@ with st.sidebar:
         value=NGROK_DOMAIN,
     )
 
-st.title("💬 COPD Questionnaire Result 慢性阻塞性肺病問卷結果")
+st.title("💬 COPD “慢阻肺”")
 
 st_autorefresh(interval=5 * 1000, key="dataframerefresh")  # Refresh every 5 seconds
 
